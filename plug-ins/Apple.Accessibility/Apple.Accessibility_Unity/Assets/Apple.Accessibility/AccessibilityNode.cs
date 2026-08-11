@@ -388,32 +388,64 @@ namespace Apple.Accessibility
             UnregisterAXElement(this);
         }
 
+#if UNITY_6000_4_OR_NEWER
+        private static Dictionary<ulong, AccessibilityNode> axElements = new Dictionary<ulong, AccessibilityNode>();
+#else
         private static Dictionary<int, AccessibilityNode> axElements = new Dictionary<int, AccessibilityNode>();
+#endif
 
         static internal void RegisterAXElement(AccessibilityNode obj)
         {
+#if UNITY_6000_4_OR_NEWER
+            if (axElements.ContainsKey(EntityId.ToULong(obj.gameObject.GetEntityId())))
+#else
             if (axElements.ContainsKey(obj.gameObject.GetInstanceID()))
+#endif
             {
                 return;
             }
+
+#if UNITY_6000_4_OR_NEWER
+            axElements.Add(EntityId.ToULong(obj.gameObject.GetEntityId()), obj);
+            AccessibilityNode parent = obj._accessibilityParent();
+            ulong parentId = EntityId.ToULong(EntityId.None);
+#else
             axElements.Add(obj.gameObject.GetInstanceID(), obj);
             AccessibilityNode parent = obj._accessibilityParent();
             int parentId = -1;
+#endif
 
             if (parent)
             {
+#if UNITY_6000_4_OR_NEWER
+                parentId = EntityId.ToULong(parent.gameObject.GetEntityId());
+#else
                 parentId = parent.gameObject.GetInstanceID();
+#endif
             }
+
 #if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
+#if UNITY_6000_4_OR_NEWER
+            _UnityAX_RegisterElementWithIdentifier2(EntityId.ToULong(obj.gameObject.GetEntityId()), parentId, parent != null);
+#else
             _UnityAX_RegisterElementWithIdentifier(obj.gameObject.GetInstanceID(), parentId, parent != null);
+#endif
 #endif
         }
 
         static internal void UnregisterAXElement(AccessibilityNode obj)
         {
+#if UNITY_6000_4_OR_NEWER
+            axElements.Remove(EntityId.ToULong(obj.gameObject.GetEntityId()));
+#else
             axElements.Remove(obj.gameObject.GetInstanceID());
+#endif
 #if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
+#if UNITY_6000_4_OR_NEWER
+            _UnityAX_UnregisterElementWithIdentifier2(EntityId.ToULong(obj.gameObject.GetEntityId()));
+#else
             _UnityAX_UnregisterElementWithIdentifier(obj.gameObject.GetInstanceID());
+#endif
 #endif
         }
 
@@ -870,7 +902,9 @@ namespace Apple.Accessibility
 #if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
         [DllImport("__Internal")] private static extern void _UnityAX_InitializeAXRuntime();
         [DllImport("__Internal")] private static extern void _UnityAX_RegisterElementWithIdentifier(int identifier, int parentIdentifier, bool hasParent);
+        [DllImport("__Internal")] private static extern void _UnityAX_RegisterElementWithIdentifier2(ulong identifier, ulong parentIdentifier, bool hasParent);
         [DllImport("__Internal")] private static extern void _UnityAX_UnregisterElementWithIdentifier(int identifier);
+        [DllImport("__Internal")] private static extern void _UnityAX_UnregisterElementWithIdentifier2(ulong identifier);
 
         private delegate string AccessibilityFrameDelegate(int identifier);
         [DllImport("__Internal")] private static extern void _UnityAX_registerAccessibilityFrame(AccessibilityFrameDelegate actionDelegate);
