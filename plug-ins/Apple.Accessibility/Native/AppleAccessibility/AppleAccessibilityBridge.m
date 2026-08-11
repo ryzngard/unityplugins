@@ -748,7 +748,17 @@ APPLE_ACCESSIBILITY_EXTERN void _UnityAX_RegisterElementWithIdentifier(int32_t i
     [AppleAccessibilityRuntime.sharedInstance registerAccessibilityElementWithIdentifier:@(identifier) parent: hasParent ? @(parentIdentifier) : nil hasParent:hasParent];
 }
 
+APPLE_ACCESSIBILITY_EXTERN void _UnityAX_RegisterElementWithIdentifier2(uint64_t identifier, uint64_t parentIdentifier, bool hasParent)
+{
+    [AppleAccessibilityRuntime.sharedInstance registerAccessibilityElementWithIdentifier:@(identifier) parent: hasParent ? @(parentIdentifier) : nil hasParent:hasParent];
+}
+
 APPLE_ACCESSIBILITY_EXTERN void _UnityAX_UnregisterElementWithIdentifier(int32_t identifier)
+{
+    [AppleAccessibilityRuntime.sharedInstance unregisterAccessibilityElementWithIdentifier:@(identifier)];
+}
+
+APPLE_ACCESSIBILITY_EXTERN void _UnityAX_UnregisterElementWithIdentifier2(uint64_t identifier)
 {
     [AppleAccessibilityRuntime.sharedInstance unregisterAccessibilityElementWithIdentifier:@(identifier)];
 }
@@ -759,6 +769,11 @@ APPLE_ACCESSIBILITY_EXTERN bool _UnityAX_RuniOSSideUnitTestWithName(const char *
 }
 
 APPLE_ACCESSIBILITY_EXTERN bool _UnityAX_RuniOSSideUnitTestWithKeyPathExpectingStringResult(int32_t identifier, const char *keyPath, const char *expected)
+{
+    return [AppleAccessibilityRuntime.sharedInstance runUnitTestForIdentifier:@(identifier) keyPath:[NSString stringWithUTF8String:keyPath] expected:[NSString stringWithUTF8String:expected]];
+}
+
+APPLE_ACCESSIBILITY_EXTERN bool _UnityAX_RuniOSSideUnitTestWithKeyPathExpectingStringResult2(uint64_t identifier, const char *keyPath, const char *expected)
 {
     return [AppleAccessibilityRuntime.sharedInstance runUnitTestForIdentifier:@(identifier) keyPath:[NSString stringWithUTF8String:keyPath] expected:[NSString stringWithUTF8String:expected]];
 }
