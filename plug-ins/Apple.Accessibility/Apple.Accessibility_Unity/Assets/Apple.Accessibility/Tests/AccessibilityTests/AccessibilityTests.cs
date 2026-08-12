@@ -8,11 +8,13 @@ namespace Apple.Accessibility.UnitTests
         [DllImport("__Internal")]
         private static extern bool _UnityAX_RuniOSSideUnitTestWithName(string name);
 
-        [DllImport("__Internal")]
-        private static extern bool _UnityAX_RuniOSSideUnitTestWithKeyPathExpectingStringResult(int identifier, string keyPath, string expected);
-
+#if UNITY_6000_4_OR_NEWER
         [DllImport("__Internal")]
         private static extern bool _UnityAX_RuniOSSideUnitTestWithKeyPathExpectingStringResult2(ulong identifier, string keyPath, string expected);
+#else
+        [DllImport("__Internal")]
+        private static extern bool _UnityAX_RuniOSSideUnitTestWithKeyPathExpectingStringResult(int identifier, string keyPath, string expected);
+#endif
 
         public static bool RuniOSUnitTestWithName(string name)
         {
