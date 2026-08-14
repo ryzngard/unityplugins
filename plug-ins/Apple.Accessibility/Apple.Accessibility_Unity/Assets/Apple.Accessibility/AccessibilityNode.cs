@@ -1186,12 +1186,12 @@ namespace Apple.Accessibility
 #if UNITY_6000_4_OR_NEWER
         private delegate string AccessibilityCustomActionNameDelegate2(ulong identifier, int idx);
         [DllImport("__Internal")] private static extern void _UnityAX_registerAccessibilityCustomActionName2(AccessibilityCustomActionNameDelegate2 actionDelegate);
-        [AOT.MonoPInvokeCallback(typeof(AccessibilityPerformCustomActionDelegate))]
+        [AOT.MonoPInvokeCallback(typeof(AccessibilityCustomActionNameDelegate2))]
         private static string _UnityAX_CustomActionName2(ulong identifier, int idx)
 #else
         private delegate string AccessibilityCustomActionNameDelegate(int identifier, int idx);
         [DllImport("__Internal")] private static extern void _UnityAX_registerAccessibilityCustomActionName(AccessibilityCustomActionNameDelegate actionDelegate);
-        [AOT.MonoPInvokeCallback(typeof(AccessibilityPerformCustomActionDelegate))]
+        [AOT.MonoPInvokeCallback(typeof(AccessibilityCustomActionNameDelegate))]
         private static string _UnityAX_CustomActionName(int identifier, int idx)
 #endif
         {
