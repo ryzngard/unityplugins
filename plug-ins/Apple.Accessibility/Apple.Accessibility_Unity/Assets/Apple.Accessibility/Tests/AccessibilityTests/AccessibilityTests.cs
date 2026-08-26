@@ -8,13 +8,8 @@ namespace Apple.Accessibility.UnitTests
         [DllImport("__Internal")]
         private static extern bool _UnityAX_RuniOSSideUnitTestWithName(string name);
 
-#if UNITY_6000_4_OR_NEWER
         [DllImport("__Internal")]
-        private static extern bool _UnityAX_RuniOSSideUnitTestWithKeyPathExpectingStringResult2(ulong identifier, string keyPath, string expected);
-#else
-        [DllImport("__Internal")]
-        private static extern bool _UnityAX_RuniOSSideUnitTestWithKeyPathExpectingStringResult(int identifier, string keyPath, string expected);
-#endif
+        private static extern bool _UnityAX_RuniOSSideUnitTestWithKeyPathExpectingStringResult(ulong identifier, string keyPath, string expected);
 
         public static bool RuniOSUnitTestWithName(string name)
         {
@@ -25,25 +20,14 @@ namespace Apple.Accessibility.UnitTests
 #endif
         }
 
-#if UNITY_6000_4_OR_NEWER
         public static bool RuniOSSideUnitTestWithKeyPathExpectingStringResult(ulong identifier, string keyPath, string expected)
         {
 #if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
-            return _UnityAX_RuniOSSideUnitTestWithKeyPathExpectingStringResult2(identifier, keyPath, expected);
+            return _UnityAX_RuniOSSideUnitTestWithKeyPathExpectingStringResult(identifier, keyPath, expected);
 #else
             return true;
 #endif
         }
-#else
-        public static bool RuniOSSideUnitTestWithKeyPathExpectingStringResult(int identifier, string keyPath, string expected)
-        {
-#if (UNITY_IOS || UNITY_TVOS) && !UNITY_EDITOR
-            return _UnityAX_RuniOSSideUnitTestWithKeyPathExpectingStringResult( identifier, keyPath, expected);
-#else
-            return true;
-#endif
-        }
-#endif
 
         [DllImport("__Internal")]
         private static extern void _UnityAX_PostFeatureEnabledNotification(string name, bool enabled);
